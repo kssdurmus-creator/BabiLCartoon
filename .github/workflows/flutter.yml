@@ -1,31 +1,30 @@
-mlxoname: Build Flutter APK
+name: Flutter Android APK
 
 on:
   push:
-    branches:
-      - main
+    branches: [ "main" ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - name: Repository'yi çek
+        uses: actions/checkout@v3
 
-      - name: Set up Flutter
+      - name: Flutter kur
         uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.24.0'
 
-      - name: Install dependencies
+      - name: Paketleri indir
         run: flutter pub get
 
-      - name: Build APK
+      - name: APK üret
         run: flutter build apk --release
 
-      - name: Upload APK
-        uses: actions/upload-artifact@v4
+      - name: APK'yı kayıt et
+        uses: actions/upload-artifact@v3
         with:
-          name: BabilCartoon-release
+          name: app-release
           path: build/app/outputs/flutter-apk/app-release.apk
