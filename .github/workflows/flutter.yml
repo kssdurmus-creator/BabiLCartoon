@@ -1,55 +1,22 @@
-name: Flutter Debug Build
+name: Debug Flutter Project
 
 on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+  workflow_dispatch:
 
 jobs:
-  build:
+  debug:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: BabiLCartoon
 
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          channel: stable
-
-      - name: Flutter Version
-        run: flutter --version
-
-      - name: Pub Get
-        run: flutter pub get
-
-      - name: Debug — Show Project Structure
+      - name: Show root folder
         run: |
-          echo "===== PROJECT FILES ====="
+          echo "===== ROOT DIRECTORY ====="
           ls -R .
 
-      - name: Build APK (Debug Mode)
-        run: flutter build apk --release --verbose
-
-      - name: Debug — Show Build Output Structure
-        run: ls -R build/app/outputs || echo "BUILD OUTPUT NOT FOUND"
-
-      - name: Debug — Check APK Exists
+      - name: Show second level
         run: |
-          if [ -f build/app/outputs/flutter-apk/app-release.apk ]; then
-            echo "APK FOUND ✔️"
-          else
-            echo "❌ APK NOT FOUND — BUILD FAILED OR WRONG PATH"
-            exit 1
-          fi
-
-      - name: Upload APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: BabiLCartoon-release
-          path: build/app/outputs/flutter-apk/app-release.apk
+          echo "===== SECOND LEVEL ====="
+          ls -R */ || echo "No subfolders"
