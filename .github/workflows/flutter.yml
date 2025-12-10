@@ -9,6 +9,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: BabiLCartoon
 
     steps:
       - name: Checkout repo
@@ -27,31 +30,26 @@ jobs:
 
       - name: Debug — Show Project Structure
         run: |
-          echo "===== PROJECT ROOT FILES ====="
+          echo "===== PROJECT FILES ====="
           ls -R .
 
       - name: Build APK (Debug Mode)
-        run: |
-          echo "===== STARTING BUILD ====="
-          flutter build apk --release --verbose
+        run: flutter build apk --release --verbose
 
       - name: Debug — Show Build Output Structure
-        run: |
-          echo "===== BUILD OUTPUT STRUCTURE ====="
-          ls -R build/app/outputs || echo "BUILD OUTPUT FOLDER NOT FOUND!"
+        run: ls -R build/app/outputs || echo "BUILD OUTPUT NOT FOUND"
 
       - name: Debug — Check APK Exists
         run: |
-          echo "===== CHECKING APK FILE ====="
           if [ -f build/app/outputs/flutter-apk/app-release.apk ]; then
             echo "APK FOUND ✔️"
           else
-            echo "❌ APK NOT FOUND — BUILD FAILED OR PATH WRONG"
+            echo "❌ APK NOT FOUND — BUILD FAILED OR WRONG PATH"
             exit 1
           fi
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: BabiLCartoon-debug-apk
+          name: BabiLCartoon-release
           path: build/app/outputs/flutter-apk/app-release.apk
