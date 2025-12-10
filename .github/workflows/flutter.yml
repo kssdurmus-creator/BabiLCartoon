@@ -1,4 +1,4 @@
-name: Flutter Build
+name: Flutter Debug Build
 
 on:
   push:
@@ -11,25 +11,47 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Install Flutter
+      - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          channel: "stable"
+          channel: stable
 
-      - name: Flutter version
+      - name: Flutter Version
         run: flutter --version
 
-      - name: Pub get
+      - name: Pub Get
         run: flutter pub get
 
-      - name: Build APK
-        run: flutter build apk --release
+      - name: Debug — Show Project Structure
+        run: |
+          echo "===== PROJECT ROOT FILES ====="
+          ls -R .
+
+      - name: Build APK (Debug Mode)
+        run: |
+          echo "===== STARTING BUILD ====="
+          flutter build apk --release --verbose
+
+      - name: Debug — Show Build Output Structure
+        run: |
+          echo "===== BUILD OUTPUT STRUCTURE ====="
+          ls -R build/app/outputs || echo "BUILD OUTPUT FOLDER NOT FOUND!"
+
+      - name: Debug — Check APK Exists
+        run: |
+          echo "===== CHECKING APK FILE ====="
+          if [ -f build/app/outputs/flutter-apk/app-release.apk ]; then
+            echo "APK FOUND ✔️"
+          else
+            echo "❌ APK NOT FOUND — BUILD FAILED OR PATH WRONG"
+            exit 1
+          fi
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: BabiLCartoon-release
+          name: BabiLCartoon-debug-apk
           path: build/app/outputs/flutter-apk/app-release.apk
