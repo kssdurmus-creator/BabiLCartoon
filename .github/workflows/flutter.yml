@@ -1,29 +1,29 @@
-name: Flutter Android APK
+name: Build Flutter APK
 
 on:
   push:
     branches: [ "main" ]
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Repository'yi çek
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-      - name: Flutter kur
+      - name: Install Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.24.0'
+          channel: stable
 
-      - name: Paketleri indir
+      - name: Get dependencies
         run: flutter pub get
 
-      - name: APK üret
+      - name: Build APK
         run: flutter build apk --release
 
-      - name: APK'yı kayıt et
+      - name: Upload APK artifact
         uses: actions/upload-artifact@v3
         with:
           name: app-release
